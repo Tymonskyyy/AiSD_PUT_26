@@ -26,4 +26,41 @@ int main() {
     while (T--) {
         if (!(cin >> command)) break; // Wczytaj komendę. Jeśli dane się skończą - wyjdź z pętli
 
-        if (command ==
+        if (command == "ADD") { // Jeśli komenda to "ADD"
+            int x; // Pudełko na liczbę, którą chcemy dodać
+            cin >> x; // Wczytaj tę liczbę
+
+            // Sprawdzamy, czy mamy jeszcze wolne krzesła
+            if (currentSize < capacity) {
+                queueArray[tail] = x; // Sadzamy gościa na krześle, na które pokazuje ogon (tail)
+
+                // Kluczowy moment: przesuwamy ogon o 1. 
+                // "% capacity" to bezpiecznik: jeśli ogon dojdzie do końca rzędu, wraca na krzesło nr 0
+                tail = (tail + 1) % capacity;
+                currentSize++; // Mamy o jedną osobę więcej w kolejce
+            }
+        }
+        else if (command == "DEL") { // Jeśli komenda to "DEL"
+            if (currentSize == 0) { // Jeśli poczekalnia jest pusta
+                cout << endl; // Wypisz tylko "Enter" (pustą linię) - tak chciał sędzia
+            }
+            else {
+                // Wypisz liczbę z krzesła, na które pokazuje głowa (head)
+                cout << queueArray[head] << endl;
+
+                // Przesuwamy głowę o 1 krzesło dalej. 
+                // "% capacity" sprawia, że jeśli głowa wyjdzie poza tablicę, wraca na początek
+                head = (head + 1) % capacity;
+                currentSize--; // Mamy o jedną osobę mniej w kolejce
+            }
+        }
+        else if (command == "ISEMPTY") { // Jeśli komenda to "ISEMPTY"
+            // Jeśli licznik osób wynosi 0, to wypisz TAK, w innym razie NIE
+            if (currentSize == 0) cout << "TAK" << endl;
+            else cout << "NIE" << endl;
+        }
+    }
+
+    delete[] queueArray; // Bardzo ważne: oddajemy komputerowi zarezerwowane krzesła (RAM), żeby nie było wycieku
+    return 0; // Kończymy program z sukcesem
+}
